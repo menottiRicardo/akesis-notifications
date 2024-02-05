@@ -38,7 +38,7 @@ app.get("/health", (req, res) => {
 });
 app.post("/send-whatsapp", async (req, res) => {
   if (process.env.CRON_API_KEY !== req.headers.authorization) {
-    console.log("unauthorized", req.headers.authorization, process.env.CRON_API_KEY);
+    console.log("unauthorized");
     return res.send("invalid request");
   }
 
@@ -46,12 +46,13 @@ app.post("/send-whatsapp", async (req, res) => {
   let phoneNumber = req.body.phoneNumber;
 
   if (!phoneNumber || !message) {
-    console.log("not message nor number");
+    console.log("not message nor number", phoneNumber, message);
     res.send("invalid request");
     return;
   }
 
   if (phoneNumber.includes("+")) {
+    console.log('phone includes', phoneNumber)
     phoneNumber = phoneNumber.split("+")[1];
   }
 
@@ -62,6 +63,7 @@ app.post("/send-whatsapp", async (req, res) => {
     return res.send("invalid request");
   }
   try {
+    console.log('sending message to>>>', numberDetails._serialized, message)
     whatsapp.sendMessage(numberDetails._serialized, message);
   } catch (error) {
     res.send("hola");
