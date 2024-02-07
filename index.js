@@ -76,6 +76,7 @@ app.post('/send-whatsapp', async (req, res) => {
 
 const whatsappReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_WHATSAPP_URL;
+  console.log('whatsapp reminder job', new Date().toLocaleDateString(), url);
   await fetch(url, {
     method: 'POST',
     headers: {
@@ -86,6 +87,8 @@ const whatsappReminderJob = cron.schedule('*/5 * * * *', async () => {
 
 const smsReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_SMS_URL;
+  console.log('sms reminder job', new Date().toLocaleDateString());
+
   await fetch(url, {
     method: 'POST',
     headers: {
@@ -96,6 +99,7 @@ const smsReminderJob = cron.schedule('*/5 * * * *', async () => {
 
 const emailReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_EMAIL_URL;
+  console.log('email reminder job', new Date().toLocaleDateString());
   await fetch(url, {
     method: 'POST',
     headers: {
@@ -104,9 +108,9 @@ const emailReminderJob = cron.schedule('*/5 * * * *', async () => {
   });
 });
 
-
 const webhooksReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_WEBHOOK_URL;
+  console.log('webhook reminder job', new Date().toLocaleDateString());
   await fetch(url, {
     method: 'POST',
     headers: {
