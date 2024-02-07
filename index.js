@@ -2,6 +2,7 @@ const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const express = require('express');
 const cron = require('node-cron');
+const fecth = require('node-fetch');
 
 require('dotenv').config();
 const whatsapp = new Client({
@@ -74,43 +75,55 @@ app.post('/send-whatsapp', async (req, res) => {
 
 // cron jobs
 
-const whatsappReminderJob = cron.schedule('*/5 * * * *', async () => {
+const whatsappReminderJob = cron.schedule('* * * * *', async () => {
   const url = process.env.CRON_WHATSAPP_URL;
-  console.log('whatsapp reminder job', new Date().toLocaleDateString(), url);
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      authorization: process.env.CRON_API_KEY,
-    },
-  });
+  console.log('whatsapp reminder job');
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        authorization: process.env.CRON_API_KEY,
+      },
+    });
+  } catch (error) {
+    console.log('error sending whatsapp reminder', error);
+  }
 });
 
 const smsReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_SMS_URL;
-  console.log('sms reminder job', new Date().toLocaleDateString());
+  console.log('sms reminder job');
 
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      authorization: process.env.CRON_API_KEY,
-    },
-  });
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        authorization: process.env.CRON_API_KEY,
+      },
+    });
+  } catch (error) {
+    console.log('error sending sms reminder', error);
+  }
 });
 
 const emailReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_EMAIL_URL;
-  console.log('email reminder job', new Date().toLocaleDateString());
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      authorization: process.env.CRON_API_KEY,
-    },
-  });
+  console.log('email reminder job');
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        authorization: process.env.CRON_API_KEY,
+      },
+    });
+  } catch (error) {
+    console.log('error sending email reminder', error);
+  }
 });
 
 const webhooksReminderJob = cron.schedule('*/5 * * * *', async () => {
   const url = process.env.CRON_WEBHOOK_URL;
-  console.log('webhook reminder job', new Date().toLocaleDateString());
+  console.log('webhook reminder job');
   await fetch(url, {
     method: 'POST',
     headers: {
